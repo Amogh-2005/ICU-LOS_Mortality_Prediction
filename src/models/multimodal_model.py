@@ -18,6 +18,8 @@ Full data flow
 Combined loss
 -------------
     L = alpha * L_ordinal_LOS + (1 - alpha) * L_binary_mortality
+      + 0.15 * band1_recall_penalty
+      + 0.10 * ordinal_consistency_loss
 
 where L_ordinal_LOS is the mean of two per-boundary BCE losses (K-1 decomp)
 and L_binary_mortality is BCEWithLogitsLoss with pos_weight.
@@ -66,28 +68,28 @@ class MultimodalICUModel(pl.LightningModule):
     lstm_hidden_size        int     default 128
     lstm_num_layers         int     default 2
     lstm_dropout            float   default 0.3
-    lstm_bidirectional      bool    default False
+    lstm_bidirectional      bool    default True
 
     tabular_input_dim       int     default 156
-    tabular_hidden_dims     list    default [256, 128]
-    tabular_output_dim      int     default 128
+    tabular_hidden_dims     list    default [512, 256, 128]
+    tabular_output_dim      int     default 256
     tabular_dropout         float   default 0.3
     tabular_use_batch_norm  bool    default True
 
-    fusion_dim              int     default 128
-    fusion_num_heads        int     default 4
+    fusion_dim              int     default 256
+    fusion_num_heads        int     default 8
     fusion_dropout          float   default 0.1
     fusion_ffn_expansion    int     default 2
 
-    private_hidden_dim      int     default 64
-    private_output_dim      int     default 64
+    private_hidden_dim      int     default 128
+    private_output_dim      int     default 128
     head_dropout            float   default 0.2
 
-    alpha                   float   default 0.5
+    alpha                   float   default 0.65
     los_boundary_weights    list|None   default None  (injected from dataset)
     mortality_pos_weight    float|None  default None  (injected from dataset)
 
-    lr                      float   default 1e-3
+    lr                      float   default 2e-4
     weight_decay            float   default 1e-4
 
     band2_threshold         float   default 0.5  (updated after calibration)
@@ -99,28 +101,28 @@ class MultimodalICUModel(pl.LightningModule):
         "lstm_hidden_size":       128,
         "lstm_num_layers":        2,
         "lstm_dropout":           0.3,
-        "lstm_bidirectional":     False,
+        "lstm_bidirectional":     True,          # FIXED: was False
         # Tabular encoder
         "tabular_input_dim":      156,
-        "tabular_hidden_dims":    [256, 128],
-        "tabular_output_dim":     128,
+        "tabular_hidden_dims":    [512, 256, 128],  # FIXED: was [256, 128]
+        "tabular_output_dim":     256,           # FIXED: was 128
         "tabular_dropout":        0.3,
         "tabular_use_batch_norm": True,
         # Fusion
-        "fusion_dim":             128,
-        "fusion_num_heads":       4,
+        "fusion_dim":             256,           # FIXED: was 128
+        "fusion_num_heads":       8,             # FIXED: was 4
         "fusion_dropout":         0.1,
         "fusion_ffn_expansion":   2,
         # Multi-task head
-        "private_hidden_dim":     64,
-        "private_output_dim":     64,
+        "private_hidden_dim":     128,           # FIXED: was 64
+        "private_output_dim":     128,           # FIXED: was 64
         "head_dropout":           0.2,
         # Loss
-        "alpha":                  0.5,
+        "alpha":                  0.65,          # FIXED: was 0.5
         "los_boundary_weights":   None,
         "mortality_pos_weight":   None,
         # Optimiser
-        "lr":                     1e-3,
+        "lr":                     2e-4,          # FIXED: was 1e-3
         "weight_decay":           1e-4,
         # Calibration thresholds (overwritten externally after Platt scaling)
         "band2_threshold":        0.5,
@@ -333,6 +335,35 @@ class MultimodalICUModel(pl.LightningModule):
             threshold=self.mortality_threshold,
         )
 
+        # ------------------------------------------------------------------
+        # Composite validation metric — used by ModelCheckpoint and scheduler
+        # composite = (Band2 AUROC + Mortality AUROC + Band1 Recall) / 3
+        # Only logged on val so it doesn't pollute test reporting
+        # ------------------------------------------------------------------
+        if stage == "val":
+            los_band2_auroc = los_metrics.get("los_band2_auroc", 0.0)
+            mort_auroc      = mort_metrics.get("mort_auroc", 0.0)
+
+            # Derive per-band probabilities from boundary logits
+            probs  = torch.sigmoid(los_logits)
+            p_ge1  = probs[:, 0]   # P(LOS >= Band 1)
+            p_ge2  = probs[:, 1]   # P(LOS >= Band 2)
+
+            # Predict band using current calibrated thresholds
+            pred_bands = torch.zeros(len(los_labels), dtype=torch.long)
+            pred_bands[p_ge1 > 0.5] = 1
+            pred_bands[p_ge2 > self.band2_threshold] = 2
+
+            true_band1_mask = (los_labels == 1)
+            if true_band1_mask.sum() > 0:
+                band1_recall = (pred_bands[true_band1_mask] == 1).float().mean().item()
+            else:
+                band1_recall = 0.0
+
+            composite = (los_band2_auroc + mort_auroc + band1_recall) / 3.0
+            self.log("val/composite",          composite,    prog_bar=True)
+            self.log("val/band1_recall_epoch", band1_recall, prog_bar=True)
+
         for metric_name, value in los_metrics.items():
             self.log(
                 f"{stage}/{metric_name}",
@@ -359,7 +390,7 @@ class MultimodalICUModel(pl.LightningModule):
         )
         scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
             optimizer,
-            mode="min",       # monitoring val/loss
+            mode="max",       # FIXED: was "min" — now tracking val/composite (higher = better)
             factor=0.5,
             patience=5,
         )
@@ -367,7 +398,7 @@ class MultimodalICUModel(pl.LightningModule):
             "optimizer": optimizer,
             "lr_scheduler": {
                 "scheduler": scheduler,
-                "monitor":   "val/loss",
+                "monitor":   "val/composite",  # FIXED: was "val/loss"
                 "interval":  "epoch",
                 "frequency": 1,
             },

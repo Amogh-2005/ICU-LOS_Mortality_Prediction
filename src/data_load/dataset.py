@@ -45,16 +45,11 @@ class ICUDataset(Dataset):
         #   shape (N=15000,) : full dataset, must be subsetted with idx
         #   shape (n_split,) : already subsetted during preprocessing,
         #                      do NOT index again -- causes IndexError
-        # sample_weights is only used by WeightedRandomSampler in the
-        # train DataLoader. Val/test get None regardless.
-        if split == "train" and "sample_weights" in data:
+        if "sample_weights" in data and split == "train":
             sw = np.asarray(data["sample_weights"])
-            # sw may be shape (N_full,) or shape (n_train,)
             if sw.shape[0] == len(idx):
-                # already subsetted to train rows — use directly
                 self.sample_weights = torch.tensor(sw, dtype=torch.float64)
             else:
-                # full-length array — subset to train rows
                 self.sample_weights = torch.tensor(sw[idx], dtype=torch.float64)
         else:
             self.sample_weights = None
