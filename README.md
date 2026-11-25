@@ -56,7 +56,7 @@ Our work has been published in **IEEE Xplore**:
 > **2026 International Conference on Sustainability, Innovation & Technology (ICSIT)**  
 > 📋 **Paper Title:** *A Multimodal Deep Learning Framework for ICU Outcome Prediction*  
 > 🏛️ **Publisher:** IEEE  
-> 🔗 **DOI:** 10.1109/ICSIT70359.2026.11766079
+> 🔗 **DOI:** 10.1109/ICSIT70359.2026.11766079<br>
 > 🗓️ **Date of Conference:** 26–27 September 2026  
 > 📅 **Date Added to IEEE Xplore:** 13 November 2026  
 
