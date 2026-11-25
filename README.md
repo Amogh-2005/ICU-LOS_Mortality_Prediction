@@ -6,11 +6,12 @@
   <img src="https://img.shields.io/badge/PyTorch%20Lightning-2.4.0-792EE5?logo=lightning&logoColor=white" />
   <img src="https://img.shields.io/badge/Streamlit-1.40.2-FF4B4B?logo=streamlit&logoColor=white" />
   <img src="https://img.shields.io/badge/Dataset-MIMIC--III-0078d7" />
-  <img src="https://img.shields.io/badge/Conference-ICSIT%202026-green" />
+  <a href="https://doi.org/10.1109/ICSIT70359.2026.11766079"><img src="https://img.shields.io/badge/IEEE%20Xplore-ICSIT%202026-00629B?logo=ieee&logoColor=white" /></a>
+  <a href="https://doi.org/10.1109/ICSIT70359.2026.11766079"><img src="https://img.shields.io/badge/DOI-10.1109%2FICSIT70359.2026.11766079-blue" /></a>
 </p>
 
-> **Research paper submitted to the 2nd International Conference on Sustainability, Innovation & Technology (ICSIT 2026)**  
-> Submission ID: **1422** · Submitted via Microsoft CMT · Date: May 2, 2026
+> **Published in IEEE Xplore — 2026 International Conference on Sustainability, Innovation & Technology (ICSIT)**  
+> DOI: **[10.1109/ICSIT70359.2026.11766079](https://doi.org/10.1109/ICSIT70359.2026.11766079)** · Publisher: IEEE · Added to IEEE Xplore: November 13, 2026
 
 ---
 
@@ -50,16 +51,17 @@ The model fuses two clinically heterogeneous data streams — **vital sign time-
 
 ## Research Paper & Conference
 
-Our work has been submitted to:
+Our work has been published in **IEEE Xplore**:
 
-> **2nd International Conference on Sustainability, Innovation & Technology (ICSIT 2026)**  
-> 📋 **Submission Title:** *A Multimodal Deep Learning Framework for ICU Outcome Prediction*  
-> 🆔 **Submission ID:** 1422  
-> 🗓️ **Submission Date:** May 2, 2026  
-> 🔗 **Submitted via:** Microsoft CMT (Conference Management Toolkit)  
-> 📧 **Correspondence:** Dr. Kumar Dilip (`kumardilip25@gmail.com`)  
+> **2026 International Conference on Sustainability, Innovation & Technology (ICSIT)**  
+> 📋 **Paper Title:** *A Multimodal Deep Learning Framework for ICU Outcome Prediction*  
+> 🏛️ **Publisher:** IEEE  
+> 🔗 **DOI:** 10.1109/ICSIT70359.2026.11766079
+> 🗓️ **Date of Conference:** 26–27 September 2026  
+> 📅 **Date Added to IEEE Xplore:** 13 November 2026  
 
-[Read the Research Paper here](./research_paper/icu_prediction.pdf)
+- 🔗 [View on IEEE Xplore](https://doi.org/10.1109/ICSIT70359.2026.11766079)
+- 📄 [Read the Research Paper PDF](./research_paper/final%20icu%20prediction%20paper.pdf)
 
 The conference focuses on cutting-edge advances in Sustainability, Innovation, and Technology, including applications of AI and machine learning in healthcare and clinical decision support systems.
 ---
@@ -481,11 +483,11 @@ If you use this work, please cite:
 ```bibtex
 @inproceedings{icsit2026_icu_multimodal,
   title     = {A Multimodal Deep Learning Framework for ICU Outcome Prediction},
-  author    = {Kumar Dilip and Others},
-  booktitle = {Proceedings of the 2nd International Conference on Sustainability,
-               Innovation \& Technology (ICSIT 2026)},
+  author    = {Dilip, Kumar and Kashyap, Amogh A. and Shetty, Abhay and Kalmadi, Aditya Sujith and Gowda, Rashmi S.},
+  booktitle = {2026 International Conference on Sustainability, Innovation \& Technology (ICSIT)},
   year      = {2026},
-  note      = {Submission ID: 1422}
+  publisher = {IEEE},
+  doi       = {10.1109/ICSIT70359.2026.11766079}
 }
 ```
 
@@ -498,5 +500,5 @@ This project is intended for academic and research use only. The MIMIC-III datas
 ---
 
 <p align="center">
-  Made with ❤️ for advancing clinical AI · ICSIT 2026 · Submission #1422
+  Made with ❤️ for advancing clinical AI · Published in IEEE Xplore · ICSIT 2026 · <a href="https://doi.org/10.1109/ICSIT70359.2026.11766079">DOI: 10.1109/ICSIT70359.2026.11766079</a>
 </p>
