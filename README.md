@@ -483,8 +483,14 @@ If you use this work, please cite:
 ```bibtex
 @inproceedings{icsit2026_icu_multimodal,
   title     = {A Multimodal Deep Learning Framework for ICU Outcome Prediction},
+<<<<<<< HEAD
   author    = {Dilip, Kumar and Kashyap, Amogh A. and Shetty, Abhay and Kalmadi, Aditya Sujith and Gowda, Rashmi S.},
   booktitle = {2026 International Conference on Sustainability, Innovation \& Technology (ICSIT)},
+=======
+  author    = {Kumar Dilip, Amogh A Kashyap, Aditya Sujith Kalmadi, Abhay Shetty, Rashmi S Gowda},
+  booktitle = {Proceedings of the 2nd International Conference on Sustainability,
+               Innovation \& Technology (ICSIT 2026)},
+>>>>>>> 0637c66fcecf35629b40f3a1fb6280917b3620ad
   year      = {2026},
   publisher = {IEEE},
   doi       = {10.1109/ICSIT70359.2026.11766079}
