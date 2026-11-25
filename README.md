@@ -63,7 +63,10 @@ Our work has been published in **IEEE Xplore**:
 - 🔗 [View on IEEE Xplore](https://doi.org/10.1109/ICSIT70359.2026.11766079)
 - 📄 [Read the Research Paper PDF](./research_paper/final%20icu%20prediction%20paper.pdf)
 
+<small>
 The conference focuses on cutting-edge advances in Sustainability, Innovation, and Technology, including applications of AI and machine learning in healthcare and clinical decision support systems.
+</small>
+
 ---
 
 ## Architecture
