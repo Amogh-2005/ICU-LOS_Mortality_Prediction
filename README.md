@@ -509,5 +509,5 @@ This project is intended for academic and research use only. The MIMIC-III datas
 ---
 
 <p align="center">
-  Made with ❤️ for advancing clinical AI · Published in IEEE Xplore · ICSIT 2026 · <a href="https://doi.org/10.1109/ICSIT70359.2026.11766079">DOI: 10.1109/ICSIT70359.2026.11766079</a>
+  Made with ❤️ for advancing clinical AI
 </p>
